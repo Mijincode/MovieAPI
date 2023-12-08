@@ -14,27 +14,28 @@
         <button type="submit">POST</button>
         <label for="register">/user / register /</label>
         <input type="text" id="registerEmail" placeholder="{email}" required />
-        <label for="registerPassword">Password:</label>
+        <label for="registerPassword"></label>
         <input
           type="password"
           id="registerPassword"
           placeholder="password"
           required
         />
-        <span>User Registration</span>
+        <span>Creates a new user account.</span>
       </form>
       <form onsubmit="userLogin(event)">
         <button type="submit">POST</button>
         <label for="loginEmail">/user / login /</label>
+
         <input type="text" id="loginEmail" placeholder="{email}" required />
-        <label for="loginPassword">Password:</label>
+        <label for="loginPassword"></label>
         <input
           type="password"
           id="loginPassword"
-          placeholder="Enter password"
+          placeholder="password"
           required
         />
-        <span>User Login</span>
+        <span>Log in to an existing user account.</span>
       </form>
 
       <!-- Get list of movies by title -->
@@ -43,11 +44,11 @@
         <label for="title">/movies / search /</label>
         <input type="text" id="title" placeholder="{title}" required />
         <!-- Add input for the "year" parameter -->
-        <label for="year">Year:</label>
+        <label for="year"></label>
         <input type="number" id="year" placeholder="{year}" />
 
         <!-- Add input for the "page" parameter -->
-        <label for="page">Page:</label>
+        <label for="page"></label>
         <input type="number" id="page" placeholder="{page}" />
         <span>Search for a movie by title</span>
       </form>
