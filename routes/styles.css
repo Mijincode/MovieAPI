@@ -16,12 +16,11 @@ body {
 }
 
 #details {
-  display: flex;
-  justify-content: center;
   align-items: center;
   padding-left: 50px;
   white-space: pre-wrap;
   word-wrap: break-word;
+  width: 90%;
 }
 
 h1 {
@@ -63,4 +62,8 @@ button {
 
 span {
   font-size: small;
+}
+
+#codeElement {
+  width: 90%;
 }

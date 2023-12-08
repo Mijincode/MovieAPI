@@ -11,45 +11,16 @@ const inputGetPoster = document.getElementById("posterInput");
 const inputUploadPoster = document.getElementById("posterId");
 const inputChooseFile = document.getElementById("posterFile");
 const inputYear = document.getElementById("year");
+const inputRegisterEmail = document.getElementById("registerEmail");
+const inputRegisterPassword = document.getElementById("registerPassword");
+const inputLoginEmail = document.getElementById("loginEmail");
+const inputLoginPassword = document.getElementById("loginPassword");
 
 let response;
 let uploadedResponse;
 let data;
 let url;
 
-// // Get movie details from API's
-// async function getData(event, searchType) {
-//   event.preventDefault();
-//   dataDiv.textContent = "";
-
-//   if (uploadedPoster) {
-//     uploadedPoster.remove();
-//   }
-
-//   movieDataContainer.appendChild(responseDetails);
-
-//   if (searchType === "title") {
-//     const title = document.getElementById("title").value;
-//     url = `http://localhost:3000/movies/search?title=${title}`;
-//     // } else if (searchType === "title && year") {
-//     //   const year = document.getElementById("year").value;
-//     //   url = `http://localhost:3000/movies/search?title=${title}&year=${year}`;
-//   } else if (searchType === "id") {
-//     const imdbID = document.getElementById("imdbID").value;
-//     url = `http://localhost:3000/movies/data/${imdbID}`;
-//   }
-
-//   dataDiv.textContent = "Loading...";
-
-//   response = await fetch(url);
-
-//   data = await response.json();
-//   clearInputs();
-
-//   dataDiv.textContent = JSON.stringify(data, null, 2);
-//   loading.innerText = "";
-// }
-// Get movie details from API's
 async function getData(event, searchType) {
   event.preventDefault();
   dataDiv.textContent = "";
@@ -186,10 +157,15 @@ function clearInputs() {
   inputUploadPoster.value = "";
   inputChooseFile.value = "";
   inputYear.value = "";
+  inputRegisterEmail.value = "";
+  inputRegisterPassword.value = "";
+  inputLoginEmail.value = "";
+  inputLoginPassword.value = "";
 }
 
 // User Register
 async function userRegister(event) {
+  let responseData;
   event.preventDefault();
   const registerEmail = document.getElementById("registerEmail").value;
   const registerPassword = document.getElementById("registerPassword").value;
@@ -204,14 +180,18 @@ async function userRegister(event) {
       body: JSON.stringify({ registerEmail, registerPassword }),
     });
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
+    // if (!response.ok) {
+    //   throw new Error(`HTTP error! Status: ${response.status}`);
+    // }
 
-    const responseData = await response.json();
-    console.log(responseData);
+    responseData = await response.json();
+    clearInputs();
+    dataDiv.textContent = JSON.stringify(responseData, null, 2);
+    // console.log(responseData);
   } catch (error) {
-    console.error("Error during fetch:", error);
+    // console.log({ error, responseData });
+    dataDiv.textContent = JSON.stringify(responseData, null, 2);
+    // console.error("Error during fetch:", error);
     dataDiv.textContent = "Error during user registration.";
   }
 }
@@ -232,14 +212,16 @@ async function userLogin(event) {
       body: JSON.stringify({ loginEmail, loginPassword }),
     });
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
+    // if (!response.ok) {
+    //   throw new Error(`HTTP error! Status: ${response.status}`);
+    // }
 
     const responseData = await response.json();
+    clearInputs();
+    dataDiv.textContent = JSON.stringify(responseData, null, 2);
     console.log(responseData);
   } catch (error) {
     console.error("Error during fetch:", error);
-    dataDiv.textContent = "Error during user login.";
+    // dataDiv.textContent = "Error during user login.";
   }
 }

@@ -13,28 +13,18 @@
       <form onsubmit="userRegister(event)">
         <button type="submit">POST</button>
         <label for="register">/user / register /</label>
-        <input type="text" id="registerEmail" placeholder="{email}" required />
+        <input type="text" id="registerEmail" placeholder="{email}" />
         <label for="registerPassword"></label>
-        <input
-          type="password"
-          id="registerPassword"
-          placeholder="password"
-          required
-        />
+        <input type="password" id="registerPassword" placeholder="password" />
         <span>Creates a new user account.</span>
       </form>
       <form onsubmit="userLogin(event)">
         <button type="submit">POST</button>
         <label for="loginEmail">/user / login /</label>
 
-        <input type="text" id="loginEmail" placeholder="{email}" required />
+        <input type="text" id="loginEmail" placeholder="{email}" />
         <label for="loginPassword"></label>
-        <input
-          type="password"
-          id="loginPassword"
-          placeholder="password"
-          required
-        />
+        <input type="password" id="loginPassword" placeholder="password" />
         <span>Log in to an existing user account.</span>
       </form>
 
