@@ -51,7 +51,6 @@ router.post("/register", async (req, res, next) => {
       return;
     }
 
-    console.log("DEBUG"); // TODO: Remove this line
     const users = await req.db
       .from("users")
       .select("*")
