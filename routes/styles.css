@@ -1,0 +1,66 @@
+body {
+  max-width: 70vw;
+  margin-left: auto;
+  margin-right: auto;
+  overflow-y: scroll;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+#movieData {
+  border-radius: 5px;
+  height: 30em;
+  display: flex;
+  justify-content: center;
+  background-color: #eeeaea;
+  overflow: scroll;
+}
+
+#details {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-left: 50px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+h1 {
+  text-align: center;
+  margin: 0;
+}
+
+p {
+  margin: 0;
+  padding-bottom: 0.5em;
+  font-size: 1.2em;
+}
+
+.form-container {
+  justify-content: space-between;
+}
+
+.form-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+form {
+  margin: 0 0 0.3em;
+  flex: 1;
+  margin-right: 10px;
+}
+
+input {
+  background-color: #eeeaea;
+  border: none;
+}
+
+button {
+  width: 6.2em;
+  padding: 0.3em 0;
+}
+
+span {
+  font-size: small;
+}

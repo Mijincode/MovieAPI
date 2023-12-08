@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
+    <title>Movie API</title>
+  </head>
+  <body>
+    <h1>Movie API</h1>
+    <div class="form-container">
+      <!-- User Registration Form -->
+      <form onsubmit="userRegister(event)">
+        <button type="submit">POST</button>
+        <label for="register">/user / register /</label>
+        <input type="text" id="registerEmail" placeholder="{email}" required />
+        <label for="registerPassword">Password:</label>
+        <input
+          type="password"
+          id="registerPassword"
+          placeholder="password"
+          required
+        />
+        <span>User Registration</span>
+      </form>
+      <form onsubmit="userLogin(event)">
+        <button type="submit">POST</button>
+        <label for="loginEmail">/user / login /</label>
+        <input type="text" id="loginEmail" placeholder="{email}" required />
+        <label for="loginPassword">Password:</label>
+        <input
+          type="password"
+          id="loginPassword"
+          placeholder="Enter password"
+          required
+        />
+        <span>User Login</span>
+      </form>
+
+      <!-- Get list of movies by title -->
+      <form onsubmit="getData(event, 'title')">
+        <button type="submit">GET</button>
+        <label for="title">/movies / search /</label>
+        <input type="text" id="title" placeholder="{title}" required />
+        <!-- Add input for the "year" parameter -->
+        <label for="year">Year:</label>
+        <input type="number" id="year" placeholder="{year}" />
+
+        <!-- Add input for the "page" parameter -->
+        <label for="page">Page:</label>
+        <input type="number" id="page" placeholder="{page}" />
+        <span>Search for a movie by title</span>
+      </form>
+
+      <!-- Get movie details by id -->
+      <form onsubmit="getData(event, 'id')">
+        <button type="submit">GET</button>
+        <label for="imdbID"></label>
+        /movies / data /
+        <input type="text" id="imdbID" placeholder="{imdbId}" required />
+        <span>Get data for a movie by imdbID</span>
+      </form>
+
+      <!-- Get movie poster by id -->
+      <div class="form-row">
+        <form onsubmit="getPoster(event)">
+          <button type="submit">GET</button>
+          <label for="posterInput"></label>
+          /posters /
+          <input type="text" id="posterInput" placeholder="{imdbId}" required />
+          <span>Get the poster for the movie by imdbID</span>
+        </form>
+      </div>
+      <!-- Upload an alternative movie poster -->
+      <form onsubmit="uploadPoster(event)">
+        <button type="submit">POST</button>
+        /posters / add /
+        <input type="text" id="posterId" placeholder="{imdbId}" required />
+        <span>Upload a poster for a movie</span>
+        <div>
+          <input type="file" id="posterFile" accept="image/*" required />
+        </div>
+      </form>
+    </div>
+
+    <div id="alternativePosters"></div>
+
+    <div id="movieData">
+      <pre id="codeElement">
+       <div id="details">
+         <div id="loading"></div>
+       </div>
+     </pre>
+    </div>
+
+    <script src="./clientScript.js"></script>
+  </body>
+</html>

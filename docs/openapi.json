@@ -1,0 +1,160 @@
+{
+  "openapi": "3.0.2",
+  "info": {
+    "title": "Movie API",
+    "description": "This is a simple Express API based on the Movie Database. It supports movie information",
+    "version": "1.0.0",
+    "termsOfService": "http://swagger.io/terms/",
+    "contact": {
+      "email": "j.hogan@qut.edu.au"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "servers": [{ "url": "/" }],
+  "tags": [
+    {
+      "name": "query",
+      "description": "API queries based on movie title and imdbID."
+    }
+  ],
+  "paths": {
+    "/api/city": {
+      "get": {
+        "tags": ["query"],
+        "summary": "List cities and provinces",
+        "description": "Full listing of cities and their provinces for the database",
+        "operationId": "listCitiesAndDistricts",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "Error": {
+                  "type": "string",
+                  "enum": ["true", "false"]
+                },
+                "Message": {
+                  "type": "string",
+                  "enum": ["Success", "Failure"]
+                },
+                "City": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string"
+                      },
+                      "district": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/city/{CountryCode}": {
+      "get": {
+        "tags": ["query"],
+        "summary": "Get cities by CountryCode",
+        "description": "Retrieve cities and provinces based on the provided CountryCode",
+        "operationId": "getCitiesByCountryCode",
+        "parameters": [
+          {
+            "name": "CountryCode",
+            "in": "path",
+            "required": true,
+            "description": "CountryCode of the cities to retrieve",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "example": {
+                  "Error": false,
+                  "Message": "Success",
+                  "City": [
+                    {
+                      "ID": 1890,
+                      "Name": "Shanghai",
+                      "CountryCode": "CHN",
+                      "District": "Shanghai",
+                      "Population": 24183300
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/api/update": {
+      "post": {
+        "tags": ["update"],
+        "summary": "Update city population",
+        "description": "Update the population of a city based on the provided information",
+        "operationId": "updateCityPopulation",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "example": {
+                "City": "Shanghai",
+                "CountryCode": "CHN",
+                "Pop": 24183300
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "successful update",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Successful update Shanghai"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Error updating population"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Database error - not updated"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
