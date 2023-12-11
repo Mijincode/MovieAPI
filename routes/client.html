@@ -32,10 +32,10 @@
       <form onsubmit="getData(event, 'title')">
         <button type="submit">GET</button>
         <label for="title">/movies / search /</label>
-        <input type="text" id="title" placeholder="{title}" required />
+        <input type="text" id="title" placeholder="{title}" />
         <!-- Add input for the "year" parameter -->
         <label for="year"></label>
-        <input type="number" id="year" placeholder="{year}" />
+        <input type="text" id="year" placeholder="{year}" />
 
         <!-- Add input for the "page" parameter -->
         <label for="page"></label>
@@ -48,7 +48,7 @@
         <button type="submit">GET</button>
         <label for="imdbID"></label>
         /movies / data /
-        <input type="text" id="imdbID" placeholder="{imdbId}" required />
+        <input type="text" id="imdbID" placeholder="{imdbId}" />
         <span>Get data for a movie by imdbID</span>
       </form>
 
@@ -58,7 +58,7 @@
           <button type="submit">GET</button>
           <label for="posterInput"></label>
           /posters /
-          <input type="text" id="posterInput" placeholder="{imdbId}" required />
+          <input type="text" id="posterInput" placeholder="{imdbId}" />
           <span>Get the poster for the movie by imdbID</span>
         </form>
       </div>
@@ -66,10 +66,10 @@
       <form onsubmit="uploadPoster(event)">
         <button type="submit">POST</button>
         /posters / add /
-        <input type="text" id="posterId" placeholder="{imdbId}" required />
+        <input type="text" id="posterId" placeholder="{imdbId}" />
         <span>Upload a poster for a movie</span>
         <div>
-          <input type="file" id="posterFile" accept="image/*" required />
+          <input type="file" id="posterFile" accept="image/*" />
         </div>
       </form>
     </div>

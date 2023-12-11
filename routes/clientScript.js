@@ -66,12 +66,6 @@ async function getPoster(event) {
   try {
     const response = await fetch(`http://localhost:3000/posters/${imdbID}`);
 
-    if (!response.ok) {
-      throw new Error(`Error: ${response.status} - ${response.statusText}`);
-    }
-
-    console.log(response.status);
-
     const blob = await response.blob();
     const urlCreator = window.URL || window.webkitURL;
     const imageUrl = urlCreator.createObjectURL(blob);
@@ -92,7 +86,7 @@ async function getPoster(event) {
   }
 }
 
-// Upload an alternative poster: saves locally, but for some reason can't stop page refresh on intial upload
+// Upload an alternative poster: saves locally, but for some reason can't stop page refresh on initial upload
 async function uploadPoster(event) {
   event.preventDefault();
 
@@ -113,6 +107,7 @@ async function uploadPoster(event) {
       {
         method: "POST",
         body: formData,
+        credentials: "include",
       }
     );
 
@@ -121,33 +116,14 @@ async function uploadPoster(event) {
     }
 
     const data = await response.json();
-    console.log(data); // Log the response data
 
-    // Display success message
-    displayMessage("Poster uploaded successfully", false);
-
-    // Clear inputs after successful upload
     clearInputs();
+    dataDiv.textContent = JSON.stringify(data, null, 2);
   } catch (error) {
     console.error("Error during fetch:", error);
-
-    // Display error message
-    displayMessage(`Error: ${error.message}`, true);
   }
 
   return false;
-}
-
-function displayMessage(message, isError) {
-  const messageDiv = document.createElement("div");
-  messageDiv.textContent = message;
-  messageDiv.style.color = isError ? "red" : "green";
-  dataDiv.appendChild(messageDiv);
-
-  // Keep the message visible for 3 seconds (adjust the time as needed)
-  setTimeout(() => {
-    messageDiv.remove();
-  }, 3000);
 }
 
 function clearInputs() {
@@ -180,18 +156,12 @@ async function userRegister(event) {
       body: JSON.stringify({ registerEmail, registerPassword }),
     });
 
-    // if (!response.ok) {
-    //   throw new Error(`HTTP error! Status: ${response.status}`);
-    // }
-
     responseData = await response.json();
     clearInputs();
     dataDiv.textContent = JSON.stringify(responseData, null, 2);
-    // console.log(responseData);
   } catch (error) {
-    // console.log({ error, responseData });
-    dataDiv.textContent = JSON.stringify(responseData, null, 2);
-    // console.error("Error during fetch:", error);
+    // dataDiv.textContent = JSON.stringify(responseData, null, 2);
+    console.error("Error during user registration.", error);
     dataDiv.textContent = "Error during user registration.";
   }
 }
@@ -212,14 +182,10 @@ async function userLogin(event) {
       body: JSON.stringify({ loginEmail, loginPassword }),
     });
 
-    // if (!response.ok) {
-    //   throw new Error(`HTTP error! Status: ${response.status}`);
-    // }
-
     const responseData = await response.json();
+    document.cookie = `jwt=${responseData.token}; path=/; Secure; SameSite=None; HttpOnly`; // This workd - token set in cookie
     clearInputs();
     dataDiv.textContent = JSON.stringify(responseData, null, 2);
-    console.log(responseData);
   } catch (error) {
     console.error("Error during fetch:", error);
     // dataDiv.textContent = "Error during user login.";

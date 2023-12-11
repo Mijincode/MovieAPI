@@ -3,11 +3,11 @@ const router = express.Router();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
+const authorization = require("../middleware/authorization");
 
 dotenv.config();
 
 router.post("/register", async (req, res, next) => {
-  console.log(req.body);
   try {
     const email = req.body.registerEmail;
     const password = req.body.registerPassword;
@@ -16,7 +16,8 @@ router.post("/register", async (req, res, next) => {
       res.status(400).json({
         status: 400,
         error: true,
-        message: "Request body incomplete - email and password needed",
+        message:
+          "Request body incomplete, both email and password are required",
       });
       return;
     }
@@ -45,7 +46,7 @@ router.post("/register", async (req, res, next) => {
   }
 });
 
-// // user login
+// user login
 router.post("/login", async (req, res, next) => {
   try {
     const email = req.body.loginEmail;
@@ -106,6 +107,10 @@ router.post("/login", async (req, res, next) => {
       message: "Internal Server Error",
     });
   }
+});
+
+router.get("/protected", authorization, (req, res) => {
+  return res.json({ success: true, message: "Access Granted" });
 });
 
 module.exports = router;

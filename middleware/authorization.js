@@ -1,13 +1,18 @@
 // middleware/authorization.js
-// const express = require("express");
-// const router = express.Router();
+const express = require("express");
+const router = express.Router();
 const jwt = require("jsonwebtoken");
+// const cookieParser = require("cookie-parser");
+
+// router.use(cookieParser());
 
 module.exports = function (req, res, next) {
   // Check for the presence and format of the 'Authorization' header
+  const authorizationHeader = req.headers.authorization;
+
   if (
-    !("authorization" in req.headers) ||
-    !req.headers.authorization.match(/^Bearer /)
+    !req.cookies.jwt &&
+    (!authorizationHeader || !authorizationHeader.match(/^Bearer /))
   ) {
     res.status(401).json({
       error: true,
@@ -16,10 +21,12 @@ module.exports = function (req, res, next) {
     return;
   }
 
-  // Extract the token from the 'Authorization' header
-  const token = req.headers.authorization.replace(/^Bearer /, "");
-  console.log("DEBUG token:", token);
+  // Extract the token from the 'Authorization' header or cookies
+  const token = req.cookies.jwt
+    ? req.cookies.jwt.replace(/^Bearer /, "")
+    : authorizationHeader.replace(/^Bearer /, "");
 
+  console.log("Received Token:", token);
   // Check if JWT token is valid
   const secretKey = process.env.JWT_SECRET;
 

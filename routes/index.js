@@ -2,12 +2,27 @@ const express = require("express");
 const router = express.Router();
 const multer = require("multer");
 const path = require("path");
-// const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
-
-// const authorization = require("../middleware/authorization");
+const cors = require("cors");
+const authorization = require("../middleware/authorization");
 
 dotenv.config();
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, postersDirectory);
+  },
+  filename: function (req, file, cb) {
+    const imdbID = req.params.imdbID;
+    const ext = path.extname(file.originalname);
+    cb(null, `${imdbID}${ext}`);
+  },
+});
+
+const postersDirectory = path.join(__dirname, "../../", "posters");
+const upload = multer({ storage: storage });
+
+// router.use(cors());
 
 //movies search by title
 router.get("/movies/search", async function (req, res, next) {
@@ -17,10 +32,22 @@ router.get("/movies/search", async function (req, res, next) {
     const searchTitle = req.query.title || "";
     const year = req.query.year || "";
 
+    const yearPattern = /^\d{4}$/;
+
+    // Test if the year matches the pattern
+    if (year && !yearPattern.test(year)) {
+      return res.status(400).json({
+        status: 400,
+        error: true,
+        message: "Invalid year format. Format must be yyyy.",
+      });
+    }
+
     if (!searchTitle) {
-      return res.json({
-        Error: true,
-        Message: "Invalid title. Please provide a valid title.",
+      return res.status(400).json({
+        status: 400,
+        error: true,
+        message: "Invalid search. Must enter a title.",
       });
     }
 
@@ -71,10 +98,10 @@ router.get("/movies/search", async function (req, res, next) {
       to,
     };
 
-    res.json({
-      Error: false,
-      Message: "Success",
-      movies: result,
+    res.status(200).json({
+      status: 200,
+      error: false,
+      message: result,
       pagination,
     });
   } catch (err) {
@@ -91,8 +118,9 @@ router.get("/movies/data/:imdbID", function (req, res, next) {
 
   if (!imdbIDRegex.test(imdbID)) {
     res.status(400).json({
+      status: 400,
       Error: true,
-      Message: "Invalid IMDb ID",
+      Message: "Invalid query parameter: invalid imdbID.",
     });
   } else {
     const promises = [
@@ -141,32 +169,18 @@ router.get("/movies/data/:imdbID", function (req, res, next) {
           ],
         };
 
-        res.json({
+        res.status(200).json({
+          status: 200,
           Error: false,
-          Message: "Success",
-          select: result,
+          Message: result,
         });
       })
       .catch((err) => {
-        console.log(err);
+        c(err);
         res.json({ Error: true, Message: "Error in MySQL query" });
       });
   }
 });
-
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, postersDirectory);
-  },
-  filename: function (req, file, cb) {
-    const imdbID = req.params.imdbID;
-    const ext = path.extname(file.originalname);
-    cb(null, `${imdbID}${ext}`);
-  },
-});
-
-const postersDirectory = path.join(__dirname, "../../", "posters");
-const upload = multer({ storage: storage });
 
 // get posters
 router.get("/posters/:imdbID", (req, res) => {
@@ -174,8 +188,8 @@ router.get("/posters/:imdbID", (req, res) => {
   const imageFileName = `${imdbID}.png`;
   const imagePath = path.join(postersDirectory, imageFileName);
 
-  console.log("Attempting to send file:", imagePath);
   res.sendFile(imagePath, (err) => {
+    // res.status(200).json({status: 200, message: ""})
     if (err) {
       console.error("Error sending file:", err);
       res.status(500).send("Internal Server Error");
@@ -183,42 +197,43 @@ router.get("/posters/:imdbID", (req, res) => {
   });
 });
 
-//   // Check if the file exists
-//   if (fs.existsSync(imagePath)) {
-//     // Send the image file
-//     res.sendFile(imagePath, (err) => {
-//       if (err) {
-//         console.error("Error sending file:", err);
-//         console.error("Error stack:", err.stack);
-//         res.status(500).send("Internal Server Error");
-//       } else {
-//         console.log("File sent successfully");
-//       }
-//     });
-//   } else {
-//     console.error("File does not exist:", imagePath);
-//     res.status(404).send("Not Found");
-//   }
-// });
+// router.use("/posters/add/:imdbID", authorization);
 
 // posters/ add
 router.post(
   "/posters/add/:imdbID",
+  // authorization,
   upload.single("poster"),
-  function (req, res, next) {
-    const imdbID = req.params.imdbID;
-    if (!req.file) {
-      res.status(400).json({ error: true, message: "No file uploaded" });
-    } else {
+  async function (req, res, next) {
+    try {
+      // File upload logic
+      if (!req.file) {
+        return res.status(400).json({
+          status: 400,
+          error: true,
+          message: "Bad Request: No poster file provided",
+        });
+      }
+
       const filePath = req.file.path;
 
+      // Additional logic for file writing, if needed
+
       res.status(200).json({
+        status: 200,
         error: false,
         message: "Poster uploaded successfully",
-        filePath,
+      });
+    } catch (error) {
+      console.error("Error during poster upload:", error);
+
+      // Internal Server Error
+      res.status(500).json({
+        status: 500,
+        error: true,
+        message: "Internal Server Error: Failed to upload the poster",
       });
     }
   }
 );
-
 module.exports = router;
