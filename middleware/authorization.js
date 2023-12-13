@@ -44,7 +44,9 @@ module.exports = function (req, res, next) {
     next();
   } catch (e) {
     if (e.name === "TokenExpiredError") {
-      res.status(401).json({ error: true, message: "JWT token has expired" });
+      res
+        .status(401)
+        .json({ status: 401, error: true, message: "JWT token has expired" });
     } else {
       res
         .status(401)

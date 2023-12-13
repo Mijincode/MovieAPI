@@ -21,6 +21,7 @@ let uploadedResponse;
 let data;
 let url;
 
+// GET movies
 async function getData(event, searchType) {
   event.preventDefault();
   dataDiv.textContent = "";
@@ -51,6 +52,7 @@ async function getData(event, searchType) {
   loading.innerText = "";
 }
 
+// // GET poster
 async function getPoster(event) {
   event.preventDefault();
   dataDiv.textContent = "";
@@ -82,11 +84,13 @@ async function getPoster(event) {
     clearInputs();
   } catch (error) {
     console.error("Error during fetch:", error);
-    dataDiv.textContent = "Error fetching poster. Please check the IMDb ID.";
+    dataDiv.textContent = `Error fetching poster. ${
+      error.message || "Please check the IMDb ID."
+    }`;
   }
 }
 
-// Upload an alternative poster: saves locally, but for some reason can't stop page refresh on initial upload
+// Upload poster
 async function uploadPoster(event) {
   event.preventDefault();
 

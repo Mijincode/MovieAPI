@@ -12,10 +12,7 @@ dotenv.config();
 router.post(
   "/register",
   [
-    // Validate email
     body("registerEmail").isEmail().normalizeEmail(),
-
-    // Validate password
     body("registerPassword").isLength({ min: 5 }),
   ],
   async (req, res, next) => {
@@ -72,10 +69,7 @@ router.post(
 router.post(
   "/login",
   [
-    // Validate email
     body("loginEmail").isEmail().normalizeEmail(),
-
-    // Validate password
     body("loginPassword").isLength({ min: 5 }),
   ],
   async (req, res, next) => {

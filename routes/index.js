@@ -185,17 +185,39 @@ router.get("/movies/data/:imdbID", function (req, res, next) {
 // get posters
 router.get("/posters/:imdbID", (req, res) => {
   const imdbID = req.params.imdbID;
+
+  // Check if IMDb ID is not provided
+  if (!imdbID) {
+    return res.status(400).json({
+      status: 400,
+      error: true,
+      message:
+        "Invalid query parameters: year. Query parameters are not permitted.",
+    });
+  }
+
   const imageFileName = `${imdbID}.png`;
   const imagePath = path.join(postersDirectory, imageFileName);
 
   res.sendFile(imagePath, (err) => {
-    // res.status(200).json({status: 200, message: ""})
     if (err) {
-      console.error("Error sending file:", err);
-      res.status(500).send("Internal Server Error");
+      return res.status(500).json({
+        status: 500,
+        error: true,
+        message: `no such file or directory,open 'res/posters/notExist_mike@gmail.com.png: ${err.message}`,
+      });
     }
   });
 });
+
+// Example for handling unauthorized request
+router.get("/protected", authorization, (req, res) => {
+  res.json({ success: true, message: "Access Granted" });
+});
+
+function isValidYear(year) {
+  return /^\d{4}$/.test(year);
+}
 
 // router.use("/posters/add/:imdbID", authorization);
 
@@ -216,8 +238,6 @@ router.post(
       }
 
       const filePath = req.file.path;
-
-      // Additional logic for file writing, if needed
 
       res.status(200).json({
         status: 200,
