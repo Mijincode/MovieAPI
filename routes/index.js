@@ -176,7 +176,7 @@ router.get("/movies/data/:imdbID", function (req, res, next) {
         });
       })
       .catch((err) => {
-        c(err);
+        console.error(err);
         res.json({ Error: true, Message: "Error in MySQL query" });
       });
   }
